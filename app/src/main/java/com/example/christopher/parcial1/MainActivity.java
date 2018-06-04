@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("New Path", _pathList.get(position).toString());
-                File selected = new File(_pathList.get(position));
+                //File selected = new File(_pathList.get(position));
                 _getFileList(_pathList.get(position));
             }
         });
