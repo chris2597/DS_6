@@ -1,5 +1,6 @@
 package com.example.christopher.parcial1;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -20,17 +21,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView _lista;
-    ListView _lstFile;
     String root;
     String[] items;
     final String audioMp3 = ".mp3";
-
-    ImageButton _playButton;
-    ImageButton _pauseButton;
-    ImageButton _stopButton;
-    MediaPlayer mpPlay;
-    MediaPlayer mpPause;
-    MediaPlayer mpStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +41,12 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listmusic, R.id.textView, items);
         _lista.setAdapter(adapter);
 
-//        _playButton = (ImageButton) findViewById(R.id.playButton);
-//        mpPlay = MediaPlayer.create(this, R.raw.inoj);
-//        _pauseButton = (ImageButton) findViewById(R.id.pauseButton);
-//        _stopButton = (ImageButton) findViewById(R.id.stopButton);
-//        mpPause = MediaPlayer.create(this, R.raw.jarule);
-//        mpStop = MediaPlayer.create(this, R.raw.jarule);
-
-//        _playButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mpPause.start();
-//            }
-//        });
+        _lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(getApplicationContext(), musicPlayer.class).putExtra("pos", position).putExtra("canciones", listMusic));
+            }
+        });
 
     }
 
