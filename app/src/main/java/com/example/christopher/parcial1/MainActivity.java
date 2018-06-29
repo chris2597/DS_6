@@ -1,5 +1,7 @@
 package com.example.christopher.parcial1;
 
+import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -16,49 +21,56 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView _lista;
-    ListView _lstFile;
-    File _f; // directorio principal
-    String _raiz; // raiz
-    private List<String> _fileList = new ArrayList<String>();
-    private List<String> _pathList = new ArrayList<String>();
-    final String tipoFichero = ".mp3";
+    String root;
+    String[] items;
+    final String audioMp3 = ".mp3";
 
+    //Se inicializan todos los objetos de la lista donde se almacenarán los audios del dispositivo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         _lista = (ListView) findViewById(R.id.lstvdir);
+        final ArrayList<File> listMusic = findMusicTracks(Environment.getExternalStorageDirectory());
+        items = new String[listMusic.size()];
 
-        _raiz = Environment.getExternalStorageDirectory().toString();
+        for (int i=0; i<listMusic.size(); i++){
 
-        Log.d("Directorio: ", _raiz.toString());
+            items[i] = listMusic.get(i).getName().toString().replace(audioMp3, "").toLowerCase();
+        }
 
-        _f = new File(_raiz);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listmusic, R.id.textView, items);
+        _lista.setAdapter(adapter);
 
-        buscarArchivo(_f);
-
-        ArrayAdapter<String> FileList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, _fileList);
-        _lista.setAdapter(FileList);
+        _lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(getApplicationContext(), musicPlayer.class).putExtra("pos", position).putExtra("canciones", listMusic));
+            }
+        });
 
     }
 
-     void buscarArchivo(File _path) {
-      File[] newList = _path.listFiles();
+    //Se buscan los audios en el dispositivo y se almacena en una lista de forma recursiva
+    public ArrayList<File> findMusicTracks(File root) {
 
-        if (newList != null) {
+        ArrayList<File> listMusic = new ArrayList<>();
+        File[] files = root.listFiles();
 
-            for (int i = 0; i < newList.length; i++) {
-                File audioFiles = newList[i];
-                if (newList[i].isDirectory()) {
+        for (File _lista: files) {
 
-                    buscarArchivo(newList[i]);
-                } else {
+            if(_lista.isDirectory()  && !_lista.isHidden()) {
 
-                    if (newList[i].getName().endsWith(".mp3")) {
-                        _fileList.add(audioFiles.getName());
-                    }
+                listMusic.addAll(findMusicTracks(_lista));
+            } else {
+
+                if(_lista.getName().endsWith(audioMp3)){
+                    listMusic.add(_lista);
                 }
             }
+            
         }
+        return listMusic;
     }
 }
+
