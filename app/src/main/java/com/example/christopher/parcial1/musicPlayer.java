@@ -1,17 +1,17 @@
 package com.example.christopher.parcial1;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.media.MediaPlayer; // Librería para implementar la reproducción
+import android.net.Uri; // Librería para implementar la dirección de los audios
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
+import android.widget.ImageButton; // Librería para implementar los botones
+import android.widget.SeekBar; //Librería para implementar la barra de progreso
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.io.File; // Librería para manejo de archivos
+import java.util.ArrayList; // Librería para crear arreglos
 
 public class musicPlayer extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,22 +31,27 @@ public class musicPlayer extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
 
+        //Se inicializa la vista de los botones
         _btnPlay = (ImageButton) findViewById(R.id.btnPlay);
         _btnPause = (ImageButton) findViewById(R.id.btnPause);
         _btnStop = (ImageButton) findViewById(R.id.btnStop);
         _btnPlayList = (ImageButton) findViewById(R.id.btnPlayList);
 
+        //Se inicializan atributos del audio
         _name = (TextView) findViewById(R.id.name);
         _durationMusic = (TextView) findViewById(R.id.time);
         _continua = (TextView) findViewById(R.id.time2);
 
+        //Se habilita el ámbito al darle click
         _btnPlay.setOnClickListener(this);
         _btnPause.setOnClickListener(this);
         _btnStop.setOnClickListener(this);
         _btnPlayList.setOnClickListener(this);
 
+        //Se inicializa la vista de la barra de progreso
         _sb = (SeekBar) findViewById(R.id.sb);
 
+        // Se actualiza progresivamente el hilo de la barra de progreso
         updateSeekBar = new Thread(){
 
             @Override
@@ -111,7 +116,7 @@ public class musicPlayer extends AppCompatActivity implements View.OnClickListen
 
         }
     }
-
+    // Se inicializan los indicadores para mostrar el progreso del audio
     private String getHRM(int miliseconds){
 
         int seconds = (int) (miliseconds / 1000 ) % 60;
@@ -122,6 +127,7 @@ public class musicPlayer extends AppCompatActivity implements View.OnClickListen
         return aux;
     }
 
+    //Se establecen los eventos según el botón accionado
     @Override
     public void onClick(View v) {
 

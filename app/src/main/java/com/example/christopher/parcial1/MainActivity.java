@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     String[] items;
     final String audioMp3 = ".mp3";
 
+    //Se inicializan todos los objetos de la lista donde se almacenarán los audios del dispositivo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Se buscan los audios en el dispositivo y se almacena en una lista de forma recursiva
     public ArrayList<File> findMusicTracks(File root) {
 
         ArrayList<File> listMusic = new ArrayList<>();
